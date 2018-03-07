@@ -112,7 +112,7 @@ the application is ready to go.
 
 ### login
 
-You will need to login, please use the login name naoise.dunne@deri.org and password secret.
+You will need to login, please use the login name guido.cecilio@deri.org and password secret.
 
 Your first commit might be to add yourself to the `Global.scala` file.
 
