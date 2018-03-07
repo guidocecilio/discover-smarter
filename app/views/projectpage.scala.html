@@ -1,0 +1,38 @@
+@* main content of project set up page *@
+@(project:Project, tasks: Seq[Task], team: Seq[User])
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="row">
+		    <ol class="breadcrumb">
+		   	  <li><a href="/#">analyse</a></li>
+		   	  <li>projects</li>
+		   	  <li><a href="/#">@project.folder</a></li>
+			  <li class="active"><strong>@project.name</strong></li>
+			</ol>
+		</div>
+		<div class="row">
+			<div id="ruleo" class="col-md-8">
+				@views.html.panels.rulespanel(project)
+			</div>
+			<div class="col-md-4">
+				<div class="row">
+					<div class="col-md-12">		       
+						@views.html.panels.graphpanel()
+					</div>
+					<div class="col-md-12">		       
+						@views.html.panels.userpanel(team)
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">		       
+						@views.html.panels.datasourcepanel(Datasource.findByProject(project.id.get).seq, false)
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+				@views.html.panels.eventspanel(tasks)
+		</div>
+	</div>
+</div>

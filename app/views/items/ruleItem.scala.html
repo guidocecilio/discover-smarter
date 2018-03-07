@@ -1,0 +1,95 @@
+@*********************************************************
+ * Code editor that allows you to create or view an      *
+ * Analytics Rule.                                       *
+ * the backing javascript can be found in rules.coffee   *
+ * for now                                               *
+ * @param rule details of the rule to be presented       *
+ * @param projectName the originating project            *
+ ********************************************************@
+@(rule: AnalyticsRule)
+ <div id="id@rule.id" class="panel panel-info" style="overflow: visible;" data-rule="@rule.id" proj-id="@rule.project">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a data-toggle="collapse" data-parent="#accordion"  href="#collapse@rule.id">
+			<span class="glyphicon glyphicon-cog"></span>
+			<span class="rulename">@rule.name</span>
+			
+        </a>
+      </h4>
+    </div>
+	<div id="collapse@rule.id" class="panel-collapse collapse">
+		<div class= row>
+			<div class="col-md-12">
+				<style>
+				#editor@(rule.id) {
+			    /** Setting height is also important, otherwise editor wont showup**/
+			    height: 400px;
+				}
+				</style>
+
+			     <div class="panel-body">
+			     	<div class="row">
+						<div id="editor@rule.id">@rule.queryString</div>
+					</div>
+					<div class="row" id="status@rule.id">
+						Last executed
+							@rule.lastExecuted.map { date =>
+						        <time class="label label-default" datetime="@date">@date.format("MMM dd yyyy")</time>
+						    }
+						<span class="label label-@if(rule.success){success}else{warning}">@if(rule.success){success}else{failure}</span>
+						<div class="editorMessage label label-success"></div>
+						<div class="btn-group pull-right">
+							<a class="saveRule btn btn-xs btn-default" href="#" alt="save the rule"> <span class="glyphicon glyphicon-save"></span></a>
+							<a class="runRule btn btn-xs btn-default" href="#" alt="run now"> <span class="glyphicon glyphicon-play"></span></a>
+							<div  class="btn-group" >
+    							<button type="button" class="btn btn-xs btn-default dropdown-toggle" data-toggle="dropdown">
+      								<span class="glyphicon glyphicon-calendar"></span>
+    							</button>
+    							<ul class="dropdown-menu"  id="dd@rule.id" >
+     								<li><a id="@rule.id" cs="0 * * * *"  href="#" >Hourly</a></li>
+     								<li><a id="@rule.id" cs="0 0 * * *"  href="#">Daily</a></li>
+      								<li><a id="@rule.id" cs="0 0 * * 0"  href="#">Weekly</a></li>
+      								<li><a id="@rule.id" cs="0 0 1 * *"  href="#">Monthly</a></li>
+    							</ul>
+  							</div>	<a class="btn btn-xs btn-default" href="#" alt="delete rule"> <span class="glyphicon glyphicon-trash"></span></a>
+							<a class="gotoProject btn btn-xs btn-default" href="#" alt="back to project"> <span class="glyphicon glyphicon-briefcase"></span></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+$(window).load(function(){
+    var editor@rule.id = ace.edit("editor@rule.id");
+    editor@(rule.id).setTheme("ace/theme/github");
+    editor@(rule.id).getSession().setMode("ace/mode/groovy");
+});
+    $('#dd@rule.id  a').click(function(e) {
+        event.preventDefault();
+        console.log(e.currentTarget);
+        cronObj = {};
+        cronArray = $(this).attr("cs").split(' ');
+        cronObj['min']=cronArray[0];
+        cronObj['hour']=cronArray[1];
+        cronObj['dom']=cronArray[2];
+        cronObj['mon']=cronArray[3];
+        cronObj['dow']=cronArray[4];
+        cronObj['user']= "root";
+        cronObj['command']= "/rule/execute-async/@rule.id";
+        $("#status@rule.id .s").remove()
+        $.ajax( {type:"post",url:"/api/cron/add",dataType:"json",contentType:"application/json", data:JSON.stringify(cronObj),
+         success: function( data ) {
+            if (data.success) {$("#status@rule.id").append('<span class="label label-success s">scheduled</span>')}
+            else { $("#status@rule.id").append('<span class="label label label-warning s">'+data.error_messages.join("\n")+'</span>');}
+         } ,
+         error: function(data, errorThrown){
+              $("#status@rule.id").append('<span class="label label label-warning s">'+errorThrown+'</span>');
+         }
+        });
+        
+    });
+
+
+</script>

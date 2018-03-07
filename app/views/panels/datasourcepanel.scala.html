@@ -1,0 +1,32 @@
+@*********************************************************
+ * panel describing a group of data sources              *
+ * also allows you to add a new datasource and           *
+ * manage list                                           *
+ * @param sources list of data sources                   *
+ * @param verbose show summary panel or detailed panel   *
+ ********************************************************@
+@(sources: Seq[models.Datasource], verbose: Boolean)
+<div class="datasources panel panel-primary ">
+	<div class="panel-heading">
+      	<span class="glyphicon glyphicon-list"></span> Datasources
+			<button type="button" class="btn btn-xs btn-info pull-right" data-toggle="dropdown">
+			  <span class="glyphicon glyphicon-cloud-upload"></span>
+			</button>
+	</div>
+	<div class="panel-body">
+		<ul class="list nav nav-pills nav-stacked">
+		    @sources.map { source =>
+				<li data-source-id="@source.id">
+				@if(verbose){
+					  <span class="action glyphicon glyphicon-cloud"></span>
+					    @source.name, @source.dataType @source.description
+					</li>
+				}else{
+					<span class="action glyphicon glyphicon-cloud"></span>
+					    @source.name (@source.dataType)
+					</li>
+				}
+		    }
+		</ul>
+	</div>
+</div>

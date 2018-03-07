@@ -1,0 +1,49 @@
+@(projects: Seq[Project], user: User)
+@layouts.main("Build Statistics", user) {
+	<div class="row">
+	  <ol class="breadcrumb">
+	    <li>Build</li>
+	    <li class="active">Statistics</li>
+	  </ol>
+    </div> 
+    
+    <div class="row" id="rowcontainer">	  
+    
+    <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Rules Executed</h3>
+     </div>
+     <div class="panel-body">
+       <img src="/api/graphite/render?from=-2hours&until=now&width=900&height=150&target=stats.smarter-data.rules.excuted"/>
+     </div>
+    </div>
+    
+    <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Rules added</h3>
+     </div>
+     <div class="panel-body">
+       <img src="/api/graphite/render?from=-2hours&until=now&width=900&height=150&target=stats.smarter-data.rules.added"/>
+     </div>
+    </div>
+    
+    <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Index Build</h3>
+     </div>
+     <div class="panel-body">
+       <img src="/api/graphite/render?from=-2hours&until=now&width=900&height=150&target=stats.smarter-data.index.builds"/>
+     </div>
+    </div>
+    
+    <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Index Accesses</h3>
+     </div>
+     <div class="panel-body">
+       <img src="/api/graphite/render?from=-2hours&until=now&width=900&height=150&target=stats.smarter-data.index.accesses"/>
+     </div>
+    </div>
+    
+  </div>  
+}

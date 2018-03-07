@@ -1,0 +1,19 @@
+@*********************************************************
+ * tab panel that show events                            *
+ * these events are related to the rule that they were   *
+ * created from                                          *
+ * @param folder The folder name that is to be displayed *
+ * @param tasks The list of events to be displayed       *
+ ********************************************************@
+@(folder: String, events: Seq[Task] = Nil)
+<div class="tab-pane" id="@(folder.replaceAll("\\s", ""))" data-folder-id="@(folder.replaceAll("\\s", ""))" >
+	<div class="row">
+		<div class="col-md-11 col-me-offset-2">
+	    <ul class="list list-group">
+	        @events.map { event =>
+	            @views.html.items.eventitem(event, folder)
+	        }
+	    </ul>
+		</div>
+	</div>
+</div>

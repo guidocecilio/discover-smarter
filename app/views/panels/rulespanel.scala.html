@@ -1,0 +1,28 @@
+@*********************************************************
+ * Panel that displays all analytics rules or add an     *
+ * Analytics Rule.                                       *
+ * the backing javascript can be found in main.coffee    *
+ * @param project the originating project                *
+ ********************************************************@
+@(project:Project)
+       
+<div id="analytics-rules" class="panel panel-primary" >
+	<div id="rules" class="panel-heading" ruleproject="@project.id">
+		<span class="glyphicon glyphicon-cog"></span> 
+		Rules
+		<button id="ruleButton" class="newRule btn btn-xs btn-info pull-right">
+		  <span class="glyphicon glyphicon-cog"></span>
+		  <span class="glyphicon glyphicon-plus"></span>
+		</button>
+	</div>
+	<div class="panel-body">
+		<div id="analytics-rulelist" class="panel-group" id="accordion">
+		   @AnalyticsRule.findByProject(project.id.get).map { rule =>
+				@views.html.items.ruleItem(rule)
+		   }
+		</div>
+	</div>
+</div>
+	<script type="text/javascript">
+		var rules = new facets.Rules( {el: "#analytics-rules"});
+	</script>

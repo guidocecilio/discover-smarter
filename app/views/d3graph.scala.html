@@ -1,0 +1,167 @@
+@********************************************************* * shows a
+network graph visualisation * * @param message to show in title bar,
+shoud be removed * * @param user name of current user who is logged in *
+********************************************************@ 
+@(message: String, user: User) 
+@layouts.twocolumnRight("Using d3 force layout", user) {
+<script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("d3.min.js"))'></script>
+<script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.ui.tooltip.js"))'></script>
+<script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.dataTables.js"))'></script>
+<script type='text/javascript' src='@routes.Assets.at("javascripts/jquery.bootpag.min.js")'></script>
+<script type='text/javascript' src='@routes.Assets.at("javascripts/sigma.min.js")'></script>
+<script type='text/javascript' src='@routes.Assets.at("javascripts/sigma.forceatlas2.js")'></script>
+<script type='text/javascript' src='@routes.Assets.at("javascripts/sigma.renderers.customShapes.min.js")'></script>
+<div class="row">
+	<ol id="smartfilters">
+	</ol>
+</div>
+@views.html.components.progressbar()
+
+<div id="pathDialog" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					area-hidden="true">&times;</button>
+				<h4 class="modal-title">Get Paths</h4>
+			</div>
+			<div class="modal-body">
+				<p>
+					Destination Node  : <select id="nodeslist"></select>
+				</p>
+			</div>
+			<div class="modal-footer">
+				 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Excute</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="previewDialog" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+					aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Preview</h4>
+			</div>
+			<div class="modal-body">
+				<p>
+				 <span id="previewText"></span>
+				</p>
+			</div>
+			<div class="modal-footer">
+				 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- <div id="entities" style="display: none"> -->
+<div id="entities" style="display: none">
+	<ul class="nav nav-tabs" id='tabsleft'>
+		<li><a data-toggle="tab" href="#tabular">Tabular</a></li>
+		<li><a data-toggle="tab" href="#data-table">Data Table</a></li>
+		<li><a data-toggle="tab" href="#sigma-graph">Graph</a></li>
+		<li><a data-toggle="tab" href="#results-tab">Results</a></li>
+	</ul>
+	<br/>
+	<div class="tab-content">
+		<div class="tab-pane active" id="tabular">
+			@views.html.panels.hdtfileinfopanel()
+			@views.html.panels.hdttabularlist()
+		</div>
+		<div class="tab-pane" id="data-table">
+			<div id="datatable"></div><br/>
+			<div id="columns"></div>
+		</div>
+		<div class="tab-pane" id="sigma-graph">
+			<div id="sigmaViz-parent" class="sigmaViz-container">
+     			<div id="savegraph"><a href="javascript:saveGraphData()"><strong><span class="glyphicon glyphicon-floppy-disk" style="color:#fff"></span></strong></a></div>		
+     			<div id="refresh"><a href="javascript:allUpdate()"><strong><span class="glyphicon glyphicon-refresh" style="color:#fff"></span></strong></a></div>		
+     			<div id="sigmaViz"></div>    	
+     		</div>
+		</div>
+		<div class="tab-pane" id="results-tab">
+			<br/>
+			<div id="resultstable"></div>
+		</div>
+	</div>
+	<br />
+</div>
+}{
+<div id="ruleo">
+	@views.html.items.ruleItem(models.AnalyticsRule.findById(message).get)
+</div>
+<div>                       
+<ul class="nav nav-tabs" id="tabsright">
+  <li class="active"><a data-toggle="tab" href="#filters">Filters</a></li>
+  <li><a data-toggle="tab" href="#pivots">Pivots</a></li>
+  <li><a data-toggle="tab" href="#files">Files</a></li>
+  <li><a data-toggle="tab" href="#query">Query</a></li>
+</ul>
+<br/>
+<div class="tab-content">
+  <div class="tab-pane active"" id="filters">
+        @views.html.panels.searchpanel()
+    <br/>
+    	 @views.html.panels.categoriespanel()
+    <small>
+    <div class="panel-group" id="types">
+    </div>
+    <div class="panel-group" id="smartentity">
+    </div>
+    </small>
+    <div id="facets-panel" style="display: none">
+    @views.html.panels.facetpanel()
+    </div>
+  </div>
+  <div class="tab-pane" id="pivots">
+  <br/>
+  </div>
+  <div class="tab-pane" id="files"><div>@views.html.items.uploaditem()</div></div>
+  <div class="tab-pane" id="query">
+  <br/>
+  @views.html.panels.localquerypanel()
+  </div>
+</div>
+<br/>
+</div>
+
+<script type="text/javascript" src="@routes.Assets.at("javascripts/ByteBuffer.min.js")"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/hdt.js")"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/hdtd3.js")"></script>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/rdf_store_hdt.js")"></script>
+<script type='text/javascript' src='@routes.Assets.at("javascripts/filters.js")'></script>
+<script type="text/javascript">
+	//var fileObj;
+	var maxid = 1111111, filesObjs ={};
+	function saveGraphData(){
+		$("#search").trigger("saveDelta");
+	}
+	function allUpdate(){
+		$("#search").trigger("all-update");
+	}
+	$(window).load(function($){
+		var graphboot = new smarterData.GraphBootstrap({ url :"@controllers.json.routes.AnalyticsOperations.executeAsync(message)"});
+		graphboot.loadGraph( function(dataHandler) {
+			smarterData.graphHandler = dataHandler;	
+		});
+	});
+
+	$(document.body).on('click', '.entity-item' ,function(){
+		uri = $(this).attr("uri");
+		content = "#" + $(this).attr("content");
+		if ($(content).is(':empty')){
+			var it = window.hdt.search(uri,"","");
+			while(it.hasNext()){
+				node = it.next();
+				$(content).append("<h3>"+node.predicate.split('/').pop().split('#').pop()+"</h3>"+node.object+"<br/>");
+			}
+		}else {
+			$(content).empty();
+		}
+	});
+	
+	</script>
+}

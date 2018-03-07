@@ -1,0 +1,14 @@
+@* uploaditem Template File *@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">Load files</h3>
+     </div>
+     <div class="panel-body">
+     	<form id="fileUpload" method="post" action="/file" class="dropzone" multiple>
+  			<div class="fallback">
+    		<input name="file" type="file" />
+  			</div> 
+ 		</form>  
+      </div>
+</div>
+<script type="text/javascript" src="@routes.Assets.at("javascripts/fileupload.js")"></script>

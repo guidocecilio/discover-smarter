@@ -1,0 +1,63 @@
+@*********************************************************
+ * tweet like infobox that tells you all you need to     *
+ * know about an event                                   *
+ * @param event details of event to be shown             *
+ * @param projectName the originating project            *
+ ********************************************************@
+@(event: Task, projectName: String)
+
+@event.eventType match {
+	case "rule" => {
+		<div class="folder panel panel-primary" data-folder-id="@event.project">
+	}
+	case "email" => {
+		<div class="folder panel panel-primary" data-folder-id="@event.project">
+	}
+	case _ => {
+		<div class="folder panel panel-default" data-folder-id="@event.project">
+	}
+}
+	<div class="panel-heading">
+			@event.eventType match {
+				case "rule" => {
+					<span class="glyphicon glyphicon-cog"></span>
+				}
+				case "email" => {
+					<span class="glyphicon glyphicon-user"></span>
+				}
+				case _ => {
+					<span class="glyphicon glyphicon-user"></span>
+				}
+			}
+			<a href="#@routes.Tasks.index(event.project)" style="color: inherit;"> @projectName (@event.folder)</a>
+			<span class="pull-right">
+				@event.dueDate.map { date =>
+			        <time datetime="@date">@date.format("MMM dd yyyy")</time>
+			    }
+			</span>
+	</div>
+	<div class="panel-body">
+		<div class= row>
+			<div class="col-md-12 lead">
+				@event.title
+			</div>
+		</div>
+		<div class= row>
+			<div class="col-md-12">
+				@event.assignedTo 
+				<div class="btn-group pull-right">
+					<a class="btn btn-xs btn-default" href="#@routes.Tasks.index(event.project)"> <span class="glyphicon glyphicon-search"></span></a>
+					@event.eventType match {
+						  case "rule" => {
+						<a class="btn btn-xs btn-default" href="@routes.GraphController.d3graph("tinker-all")"> <span class="glyphicon glyphicon-list"></span></a>
+						}
+						  case _ => {
+						<a class="btn btn-xs btn-default" href="@routes.GraphController.d3graph("enron-all")"> <span class="glyphicon glyphicon-cloud"></span></a>
+						}
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>	
+		    		

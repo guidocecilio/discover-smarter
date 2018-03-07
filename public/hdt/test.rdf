@@ -1,0 +1,8 @@
+<rdf:RDF
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:foaf="http://xmlns.com/foaf/0.1/"
+ >
+    <rdf:Description rdf:about="http://dig.csail.mit.edu/breadcrumbs/blog/4">
+        <foaf:maker rdf:resource="http://www.w3.org/People/Berners-Lee/card#i"/>
+    </rdf:Description>
+</rdf:RDF>

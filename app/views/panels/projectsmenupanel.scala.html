@@ -1,0 +1,42 @@
+@*********************************************************
+ * navigation element that helps you see a group and all *
+ * it's related projects                                 *
+ * @param projects all the projects                      *
+ ********************************************************@
+@(projects: Seq[Project])
+<div id="projects"  class="panel-group" id="accordion">
+	@projects.groupBy(_.folder).map {
+	    case (group, projects) => {
+	        @views.html.items.projectgroupitem(group, projects)
+	    }
+	}
+</div>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+      <h3 class="panel-title">New Project</h3>
+     </div>
+     <div class="panel-body">
+     	<form id="projectUpload" method="post" action="/file" class="dropzone" multiple>
+  			<div class="fallback">
+    		<input name="file" type="file" />
+  			</div> 
+  			
+ 		</form>
+ 		<button id="newGroup" style="margin-top:5px;" class="btn btn-info">
+			<span class="glyphicon glyphicon-folder-close"> </span>&nbsp;
+			<span class="glyphicon glyphicon-plus"></span>
+		</button>  
+      </div>
+</div>
+
+<!-- 
+<div id="dropzone" class="vbox boxcenter center dropzone">
+	Drop in HDT or RDF files from your desktop
+
+	<button id="newGroup" style="margin-top:5px;" class="btn btn-info">
+		<span class="glyphicon glyphicon-folder-close"> </span>&nbsp;
+		<span class="glyphicon glyphicon-plus"></span>
+	</button>
+</div>
+-->

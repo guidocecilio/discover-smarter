@@ -1,0 +1,25 @@
+@* facetpanel Template File *@
+@(param: Any)
+    <div class="datasources panel panel-primary" id="facetpanel">
+        <div class="panel-body">
+              <div class="row">
+                <div id="facettags"></div>
+              </div>
+            <div class="row" style="height: 100%; overflow-y: auto;">
+              <p class="list-group-item-heading">Attributes</p>
+             <small>
+              <div class="collapse navbar-collapse" id="facetgroups">
+                    <ul id="facet-entities" class="nav nav-stacked"></ul>
+              </div>
+              </small>
+            </div>
+        </div>
+            <div id="layouts" class="control">
+                <div class="btn-toolbar" role="toolbar" style="margin: 10px;">
+                    <div class="btn-group btn-group-sm">
+                        <button id="force" type="button" class="btn btn-default">Force</button>
+                        <button id="radial" type="button" class="btn btn-default">Radial</button>
+                    </div>
+                </div>
+            </div>
+        </div>

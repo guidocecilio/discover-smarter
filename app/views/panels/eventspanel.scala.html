@@ -1,0 +1,26 @@
+@*********************************************************
+ * panel that shows events as a set of tab panels        *
+ * these events are related to the rule that they were   *
+ * created from.                                         *
+ * @param events The list of events to be displayed      *
+ ********************************************************@
+@(events: Seq[Task])
+	  	<ul class="nav nav-tabs" id="eventTabs">
+  			@events.groupBy(_.folder).map {
+				case (folder, events) => {
+  			<li><a href="#@(folder.replaceAll("\\s", ""))" data-toggle="tab">@folder
+  			</a></li>
+			}}
+		</ul>
+	  	
+	  	
+	 <div class="tab-content">
+			@events.groupBy(_.folder).map {
+			case (folder, events) => {
+					@views.html.panels.eventsfolder(folder, events)
+				}
+			}
+	</div>
+<script>
+$('#eventTabs a:first').tab('show');
+</script>

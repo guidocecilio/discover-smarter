@@ -1,0 +1,50 @@
+@* hdtfileinfopanel Template File *@
+@(param: Any)
+ <div class="panel panel-default">
+     <div class="panel-body">
+         <h4>
+             <span id="hdtname"></span>
+         </h4>
+         File: <span id="file"></span><br /> Description: <span
+             id="description"></span>
+         <div style="display:none">
+         <div id="more-info">
+         <h4>HDT File</h4>
+         Size : <span id="size"></span>
+         <h4>Dictionary</h4>
+         <div id="dictionary">
+             Total entries: <span id="totalentries"></span><br /> Number of
+             shared: <span id="numshared"></span><br /> Number of subjects: <span
+                 id="numsubjects"></span><br /> Number of predicates: <span
+                 id="numpredicates"></span><br /> Number of objects: <span
+                 id="numobjects"></span><br />
+         </div>
+         </div>
+         </div>
+         <button id="more-details" type="button" data-placement="bottom" class="pull-right btn btn-default btn-xs" >
+			  <span class="glyphicon glyphicon-chevron-down"></span>
+		 </button>
+     </div>
+     
+     <script>
+     $(window).load(function(){
+         // TODO: needs a better way to know this is the file we need to look up
+         // should use backbone even if written in javascript
+     $.ajax({
+         url : '/assets/hdt/swdf.json',
+         async : false,
+         dataType : 'json',
+         success : function(response) {
+             file = response;
+             console.log(file);
+             $("#hdtname").text(file.name);
+             $("#file").text(file.file);
+             $("#hdtname").text(file.name);
+             $("#description").text(file.description);
+             console.log("All done");
+         }
+     });
+ 	 $("#more-details").popover({html:true,container: 'body',content:function (){ return $("#more-info").html()}})
+     });
+     </script>
+ </div>

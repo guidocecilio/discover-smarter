@@ -1,0 +1,35 @@
+@*********************************************************
+ * navigation element that helps you see a group and all *
+ * it's related projects                                 *
+ * @param group details of the group                     *
+ * @param projects all the projects in the group         *
+ ********************************************************@
+@(group: String, projects: Seq[Project] = Nil)
+ <div class="panel panel-default" data-group="@group">
+    <div class="panel-heading">
+    	<h4 class="panel-title">
+    		<span>
+	    	<a class="toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse@group.replaceAll("\\s+", "_")">
+	    		<span class="glyphicon glyphicon-briefcase"></span>
+	    		<span class="groupName">@group</span>
+	    	</a>
+			<div class="btn-group pull-right">
+	    		<button class="newProject btn btn-info btn-xs" alt="new Project">
+	    			<span class="glyphicon glyphicon-plus"></span></span></button>
+				<a class="deleteGroup btn btn-danger btn-xs" alt="delete Group"><span class="glyphicon glyphicon-remove"></span></a>
+			</div>
+    		</span>
+    </div>
+    <div id="collapse@group.replaceAll("\\s+", "_")" class="panel-collapse collapse">
+    	<div class="panel-body">
+			    <ul class="nav nav-pills nav-stacked">
+		        @projects.map { project =>
+			            @views.html.items.projectitem(project)
+					        @Datasource.findByProject(project.id.get).map { datasource =>
+			                	<span><small>@datasource.name</small></span>
+					        }
+		        }
+			    </ul>
+    	</div>
+    </div>
+</div>

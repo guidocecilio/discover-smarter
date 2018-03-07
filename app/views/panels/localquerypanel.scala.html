@@ -1,0 +1,38 @@
+  <div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Query</h3>
+  </div>
+  <div class="panel-body" style="padding: 2px;">
+    <div style="height: 100px;" id="edit">g.V();</div>
+    <span>Language:
+  		<select id="querylang">
+  			<option value="Gremlin">Gremlin</option>
+  			<option value="SPARQL">SPARQL</option>
+  		</select>
+  	</span>
+    <button id="execute" type="button" class="btn btn-default btn-xs pull-right">
+        <span class="glyphicon glyphicon-play"></span> Execute
+    </button>
+    </div>
+</div>
+<div class="panel panel-default" style="display:none" id="output-panel">
+  <div class="panel-heading">
+    <h3 class="panel-title">Output</h3>
+  </div>
+  <div class="panel-body" style="padding: 2px;">
+    <div style="font-size:10px;font-family:Courier;color: #00CC00;background: #000000;padding: 10px;" id="output"></div>
+  </div>
+</div>
+<script type="text/javascript" >
+$("#querylang").change(function(){
+	var querylang = $("#querylang").val();
+	var editor = ace.edit("edit");
+	if (querylang === "SPARQL"){
+		editor.getSession().setMode("ace/mode/sparql");
+		editor.getSession().setValue("SELECT * WHERE {?s ?p ?o} LIMIT 10");
+	}else{
+		editor.getSession().setMode("ace/mode/javascript");
+		editor.getSession().setValue("g.V();");
+	}
+});
+</script>

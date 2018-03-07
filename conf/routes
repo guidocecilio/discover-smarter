@@ -1,0 +1,111 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+##################
+# WEBAPP
+##################
+
+GET     /                                   controllers.Projects.index
+GET     /build                              controllers.Projects.build
+
+# Authentication
+POST    /login                              controllers.Application.authenticate
+GET     /login                              controllers.Application.login
+GET     /logout                             controllers.Application.logout
+GET		/ping								controllers.PingController.ping
+
+# Graph
+GET     /d3graph/:id                     	controllers.GraphController.d3graph(id: String)
+
+# Projects                                  
+GET 	/projects							controllers.Projects.listProjects()
+POST    /projects                           controllers.Projects.add()
+
+POST    /projects/groups                    controllers.Projects.addGroup()
+DELETE  /projects/groups                    controllers.Projects.deleteGroup(group: String)
+PUT     /projects/groups                    controllers.Projects.renameGroup(group: String)
+
+DELETE  /projects/:project                  controllers.Projects.delete(project: Long)
+PUT     /projects/:project                  controllers.Projects.rename(project: Long)                      
+
+POST    /projects/:project/team             controllers.Projects.addUser(project: Long)
+DELETE  /projects/:project/team             controllers.Projects.removeUser(project: Long)
+             
+GET     /projects/:project/tasks            controllers.Tasks.index(project: Long)
+POST    /projects/:project/tasks            controllers.Tasks.add(project: Long, folder: String)
+
+# Tasks                      
+PUT     /tasks/:task                        controllers.Tasks.update(task: Long)
+DELETE  /tasks/:task                        controllers.Tasks.delete(task: Long)
+
+POST    /tasks/folder                       controllers.Tasks.addFolder
+DELETE  /projects/:project/tasks/folder     controllers.Tasks.deleteFolder(project: Long, folder: String)
+PUT     /project/:project/tasks/folder      controllers.Tasks.renameFolder(project: Long, folder: String)
+
+# Rules
+POST    /rule			                   	controllers.AnalyticsCatalogue.add()
+GET     /rule                               controllers.AnalyticsCatalogue.getAll()
+PUT		/rule/rename/:rule	                controllers.AnalyticsCatalogue.rename(rule: String)
+PUT		/rule/newquery/:rule	            controllers.AnalyticsCatalogue.updateQueryString(rule: String)
+
+
+##################
+# JSON SERVICES
+##################
+
+# Rules
+POST    /rules			                   	controllers.json.AnalyticsRules.create()
+GET     /rules			                   	controllers.json.AnalyticsRules.getAll()
+
+# Execute Rules
+GET		/rule/execute/:rule					controllers.json.AnalyticsOperations.execute(rule: String)
+GET		/rule/execute-async/:rule			controllers.json.AnalyticsOperations.executeAsync(rule: String)
+
+# Files
+GET		/rule/file/:rule					controllers.HdtFileServer.getFileById(rule: String)
+GET     /file                               controllers.HdtFileServer.listFiles()
+POST    /file                     			controllers.HdtFileServer.upload()
+DELETE	/file/:name							controllers.HdtFileServer.deleteFile(name: String)
+GET		/file/:name							controllers.HdtFileServer.getFileByName(name: String)
+GET     /file/latest/:simpleName/:extension controllers.HdtFileServer.getLatest(simpleName: String, extension: String)
+GET     /api/files/:file                    controllers.HdtFileServer.downloadFile(file: String)
+POST    /textfile/:filename/:ext            controllers.json.TextSave.create(filename, ext)
+GET     /textfile/:filename                 controllers.json.TextSave.getLatest(filename)
+ 
+# RdfClassTypes
+POST    /classtype			                   	controllers.json.RdfClassTypes.create()
+GET     /classtype			                   	controllers.json.RdfClassTypes.getAll()
+GET     /classtype/:ruleId			            controllers.json.RdfClassTypes.getByRuleId(ruleId)
+
+# Data Source Service
+# Legacy mappings TODO: need to remove these and use restful mappings only.
+GET 	/datasource						    controllers.json.DataSources.listDataSources()
+GET 	/project/:project/datasource	    controllers.json.DataSources.getDataSourcesByProjectId(project: Long)
+POST 	/datasource/create					controllers.json.DataSources.createDataSource()
+GET		/datasource/:id						controllers.json.DataSources.getDataSourceById(id: Long)
+
+# TAIL
+GET 	/tail/:file/:nooflines				controllers.json.WebTailController.tail(file: String, nooflines: Int)
+
+
+# JSON Assist Services
+GET     /assets/javascripts/routes  		controllers.Application.javascriptRoutes()
+GET     /assets/javascripts/json/routes  	controllers.json.JsonRoutes.javascriptRoutes()
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               		controllers.Assets.at(path="/public", file)
+GET     /webjars/*file              		controllers.WebJarAssets.at(file)
+
+#API Services
+GET     /api/index/:file/build              controllers.ApiController.build(file: String)
+GET     /api/index/:file/get                controllers.ApiController.getIndex(file)
+GET     /api/index/:file/get/min		    controllers.ApiController.getMinIndex(file)
+POST    /api/cron/add		                controllers.ApiController.addCronJob
+GET     /api/graphite/render				controllers.ApiController.renderGraph()
+GET     /api/files/:file/entities           controllers.ApiController.extractEntities(file: String)
+POST    /api/save                           controllers.ApiController.save()
+GET		/api/convert/:file					controllers.ApiController.convertCSV2RDF(file: String)
+
+# WebChooser url
+GET     /webchooser              			controllers.Application.webChooserIndex

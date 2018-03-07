@@ -1,0 +1,148 @@
+import play.api._
+import models._
+import anorm._
+import util._
+import play.api.Play
+<<<<<<< HEAD
+import java.io.File
+=======
+import controllers.routes
+import java.io.{File,FileInputStream,FileOutputStream}
+>>>>>>> origin/i20_s14_List_datasources
+
+object Global extends GlobalSettings {
+  override def onStart(app: Application) {
+    InitialData.insert()
+    new java.io.File("discover-smarter-1.0-SNAPSHOT/target/store/file").mkdirs()
+    // TODO: ND fix this 'orrible hack see:  https://groups.google.com/forum/#!topic/play-framework/neSqAvkeIE4
+    // nasty java IO 
+    System.setProperty("java.io.tmpdir", System.getProperty("user.dir"))
+  }
+}
+
+/**
+ * Initial set of data to be imported 
+ * in the sample application.
+ */
+object InitialData {
+  
+  def date(str: String) = new java.text.SimpleDateFormat("yyyy-MM-dd").parse(str)
+  
+  def insert() = {
+    
+    if(User.findAll.isEmpty) {
+      
+      Seq(
+        User("naoise.dunne@deri.org", "Naoise Dunne", "secret"),
+        User("tommy.drummond@gmail.com", "Tommy Drummond", "secret"),
+        User("MOHAMMAD.WAQAR@deri.org", "Mohammad Waqar", "secret"),
+        User("guido.cecilio@insight-centre.org", "Guido Cecilio", "secret"),
+        User("mike.brosnan@xgstechnologies.ie", "Mike Brosnan", "secret"),
+        User("test@test.com", "tester", "secret")
+      ).foreach(User.create)
+      
+      
+      Seq(
+		  Datatype("graph","Graph Database"),
+		  Datatype("feed","Online feed, such as RSS"),
+		  Datatype("webpage","Graph Database")
+	).foreach(Datatype.create)
+      
+      Seq(
+          Datasource(Id(1L), "Tinkergraph", "tinkergraph", 1, "tinker graph demo","graph"),
+		  Datasource(Id(2L), "Semantic Dogfood", "swdf.hdt", 1, "Semantic Dogfood as HDT","graph"),
+		  Datasource(Id(3L), "friendface feed", "http://somefabsite.com", 2, "polling some super web site","webpage"),
+		  Datasource(Id(4L), "old enron dataset", "public/hdt/oldenron.hdt", 2, "Enron example","graph"),
+		  Datasource(Id(5L), "basic crime datset", "public/hdt/oldenron.hdt", 2, "basic crime","graph")
+	  ).foreach(Datasource.create)
+      
+      Seq(
+        Project(Id(1L), "Talend Example", "Demonstration of using Talend") -> Seq("naoise.dunne@deri.org", "MOHAMMAD.WAQAR@deri.org", "mike.brosnan@xgstechnologies.ie") -> Seq(1L),
+        Project(Id(2L), "Dogfood", "Semantic Dogfood samples") -> Seq("naoise.dunne@deri.org", "MOHAMMAD.WAQAR@deri.org") -> Seq(2L),
+        Project(Id(3L), "Enron", "Enron dataset") -> Seq("naoise.dunne@deri.org", "tommy.drummond@gmail.com") -> Seq(4L),
+        Project(Id(4L), "Crime", "UK") -> Seq("naoise.dunne@deri.org", "tommy.drummond@gmail.com") -> Seq(5L),
+        Project(Id(5L), "Crime", "Chicago") -> Seq("naoise.dunne@deri.org", "tommy.drummond@gmail.com") -> Seq(5L),
+        Project(Id(6L), "Crime", "Greece") -> Seq("naoise.dunne@deri.org", "tommy.drummond@gmail.com") -> Seq(5L)
+      ).foreach {
+        case ((project,members),datasources) => Project.create(project, members, datasources)
+      }
+      
+      Seq(
+        Task(NotAssigned, "Enron in trouble", 1, "2 people detected", false, None,"rule", None),
+        Task(NotAssigned, "New tinkergraph released", 1, "Tinkergraph was added on Monday 4th of April", false, Some(date("2013-11-15")), "rule", None),
+        Task(NotAssigned, "Personal", 2, "Looking for good researchers in dogfood", false, Some(date("2013-11-18")), "action", Some("naoise.dunne@deri.org")),
+        Task(NotAssigned, "High Centrality", 1, "Josh is now connected to Mark ", true, Some(date("2013-11-15")), "action", None),
+        Task(NotAssigned, "Enron Fraud", 3, "Luke Simmons has a fraud score of 4", false, Some(date("2013-01-01")), "rule", Some("mike.brosnan@xgstechnologies.ie"))
+      ).foreach(Task.create)
+      
+      Seq(
+          AnalyticsRule(Id("tinkerAll"), "simple tinker graph", "TinkerGraphFactory.createTinkerGraph()", "Gremlin", 1L, Some(date("2013-11-11")), None, true, 1L),
+          AnalyticsRule(Id("tinkerEigenvector"), "People with high centrality", 
+              "// calculate the primary eigenvector (eigenvector centrality) of a graph \n" +
+              "m = [:]; c = 0; \n" +
+              "g.V.outE.inV.groupCount(m).loop(3){c++ < 1000} \n m", "Gremlin", 1L, Some(date("2013-11-12")), None, false, 1L),
+          AnalyticsRule(Id("simplemap"),  "Simple map", 
+              "def map = [name:\"Gromit\", likes:\"cheese\", id:1234] \n map", 
+              "Gremlin", 1L, Some(date("2013-11-12")), None, false, 1L),
+          AnalyticsRule(Id("dogfoodAll"),  "All of Sem.Dogfood", 
+              "g", 
+              "Gremlin", 2L, Some(date("2013-11-12")), None, false, 2L),
+          AnalyticsRule(Id("backgroundChecks"),  "Background Checks", 
+              "g", 
+              "Gremlin", 4L, Some(date("2013-11-12")), None, false, 3L),
+          AnalyticsRule(Id("executetest"),  "SparqlTest", 
+               """SELECT DISTINCT ?s ?name
+						WHERE {
+						    ?s a <http://xmlns.com/foaf/0.1/Person> .
+						    ?s <http://xmlns.com/foaf/0.1/name> ?name .
+						    ?s <http://swrc.ontoware.org/ontology#affiliation> <http://data.semanticweb.org/organization/deri-nui-galway> .
+						}""", "sparql",
+				2L, 
+				Some(date("2013-11-12")), 
+				Option("""SELECT DISTINCT ?s ?name
+						WHERE {
+						    ?s a <http://xmlns.com/foaf/0.1/Person> .
+						    ?s <http://xmlns.com/foaf/0.1/name> ?name .
+						    ?s <http://swrc.ontoware.org/ontology#affiliation> <http://data.semanticweb.org/organization/deri-nui-galwa> .
+						}"""), false, 1L),
+          AnalyticsRule(Id("dogfoodv5000"),  "Dogfood, vertex 5002-21", 
+              """
+                sg = new TinkerGraph()
+				count = 0
+				def goc(v,g){
+				 	nv=g.getVertex(v.id);
+				 	if(nv==null){
+				 		nv=g.addVertex(++count,ElementHelper.getProperties(v))
+				 	};
+				 	nv
+				}
+				g.V[5002..5021].outE.sideEffect{
+					sg.addEdge(it.id,
+								goc(it.outV.next(),sg),
+								goc(it.inV.next(),sg),
+								it.label,
+								ElementHelper.getProperties(it))
+					}.iterate()
+				sg
+              """, 
+              "Gremlin", 2L, Some(date("2013-11-12")), None, false, 2L)
+      ).foreach(AnalyticsRule.create)
+      
+    }
+    
+    // copy the CSV files to the "target/store/file" directory
+    val sourcePath = "public/testdata/"
+    val destPath = "target/store/file/"
+    val appPath = Play.current.path.getAbsolutePath()
+    println("Coping CSV files from \"" + sourcePath + "\" to \"" + destPath + "\"")
+             
+    val files = new File(appPath, sourcePath).listFiles.filter(_.getName.endsWith(".csv"))
+    for(i <- 0 until files.length) {
+    	val destFile = appPath + "/" + destPath + files(i).getName()
+    	println("Copying the file: " + files(i) + "\n to: " + destFile);
+    	new FileOutputStream(destFile) getChannel() transferFrom(
+    			new FileInputStream(files(i)) getChannel, 0, Long.MaxValue )
+    }
+  }
+  
+}

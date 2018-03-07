@@ -1,0 +1,112 @@
+@********************************************************* * general
+container layout used through out the * * smarter data interface * *
+includes the main Nav bar for the moment * * @param title title to be
+shown * * @param user name of current user who is logged in * * @param
+body html to be wrapped, from other templates * *
+********************************************************@ @(title:
+String, user: User)(body: Html)
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Smarter Data</title>
+<link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.png")">
+<link rel="stylesheet" href='@routes.Assets.at("stylesheets/cerulean/bootstrap.min.css")'>
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/cerulean/bootswatch.min.css")">
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/basic.css")">
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/animate.css")">
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/graph.css")">
+<link rel="stylesheet" href="@routes.WebJarAssets.at(WebJarAssets.locate("themes/base/jquery.ui.all.css"))">
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/jquery.contextMenu.css")">
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/jquery.dataTables.css")">
+
+        <script type="text/javascript" src="@routes.WebJarAssets.at(WebJarAssets.locate("underscore-min.js"))"></script>
+        <script>
+            window.facets = { };
+            window.smarterData = { };
+        </script>
+        
+        <script type="text/javascript" src="@routes.Application.javascriptRoutes"></script>
+        <script type="text/javascript" src="@controllers.json.routes.JsonRoutes.javascriptRoutes"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.7.1.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-play-1.7.1.js")"></script>
+		<script type="text/javascript" src="@routes.WebJarAssets.at(WebJarAssets.locate("backbone-min.js"))"></script>
+        <script type="text/javascript" src="@routes.WebJarAssets.at(WebJarAssets.locate("minified/jquery.ui.core.min.js"))"></script>
+        <script type="text/javascript" src="@routes.WebJarAssets.at(WebJarAssets.locate("minified/jquery.ui.widget.min.js"))"></script>
+        <script type="text/javascript" src="@routes.WebJarAssets.at(WebJarAssets.locate("minified/jquery.ui.menu.min.js"))"></script>
+        <script type="text/javascript" src="@routes.WebJarAssets.at(WebJarAssets.locate("minified/jquery.ui.autocomplete.min.js"))"></script>
+		<script type="text/javascript" src="@routes.WebJarAssets.at(WebJarAssets.locate("backbone.localStorage.js"))"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/gremlin.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/hdtgremlin.js")"></script>
+		<script type="text/javascript" src="@routes.Assets.at("javascripts/facets.js")"></script>
+        <script type='text/javascript' src='@routes.Assets.at("javascripts/hdttable.js")'></script>
+		<script type="text/javascript" src="@routes.Assets.at("javascripts/graphrender.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/graphview.js")"></script>
+        <script type="text/javascript" src="@routes.WebJarAssets.at(WebJarAssets.locate("dropzone.js"))"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/projectupload.js")"></script>
+        <script type="text/javascript" src="@routes.Assets.at("javascripts/jquery.contextMenu.js")"></script>
+        
+        
+        <script>
+            // hilights the correct navbar
+            $(document).ready(function () {
+                $('a[href="' + this.location.pathname + '"]').parent().addClass('active');
+                $('a[href="' + this.location.pathname + '"]').parent().parent().parent().addClass('active');
+             });
+
+        </script>    
+    	<style>[touch-action="none"]{ -ms-touch-action: none; touch-action: none; }[touch-action="pan-x"]{ -ms-touch-action: pan-x; touch-action: pan-x; }[touch-action="pan-y"]{ -ms-touch-action: pan-y; touch-action: pan-y; }[touch-action="scroll"],[touch-action="pan-x pan-y"],[touch-action="pan-y pan-x"]{ -ms-touch-action: pan-x pan-y; touch-action: pan-x pan-y; }</style>
+		<style>
+			.nav ul {
+				margin-left: 15px !important;
+			}
+		</style>
+    </head>
+    <body style="width=100%">
+	    <div class="navbar navbar-default " role="navigation">
+    <div class="container">
+	        <div class="navbar-header">
+	          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	            <span class="sr-only">Toggle navigation</span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	            <span class="icon-bar"></span>
+	          </button>
+	          <a href="@routes.Projects.index" class="navbar-brand"><span>Smarter</span>Data</a>
+	        </div>
+	        <div class="collapse navbar-collapse navbar-ex1-collapse">
+	          <ul class="nav navbar-nav">
+	            <li><a href="/build" >Build</a></li>
+	            <li><a href="/" >Analyse</a></li>
+	            <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">Visualise<b class="caret"></b></a>
+	            <ul class="dropdown-menu" role="menu">
+                @AnalyticsRule.findAll.map { rule =>
+                    @views.html.items.viewmenuitem(rule)
+                }
+              </ul>
+	            
+	            </li>
+	          </ul>
+	          <ul class="nav navbar-nav navbar-right">
+	            <li><p class="navbar-text">@user.name <span>(@user.email)</p></span></li> 
+	            <li><button type="button" class="btn btn-default navbar-btn"><a href="@routes.Application.logout()">Logout</a></button></li>
+	          </ul>
+	        </div><!--/.nav-collapse -->
+	      </div>
+    </div>
+    <div id="top" class="container-fluid">
+        @body
+    </div>
+
+	<script type='text/javascript'
+		src='@routes.WebJarAssets.at(WebJarAssets.locate("07.31.2013/src/ace.js"))'
+		charset="utf-8"></script>
+	<script type='text/javascript'
+		src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap.min.js"))'></script>
+	<script type='text/javascript'
+		src='@routes.WebJarAssets.at(WebJarAssets.locate("bootstrap-datepicker.js"))'
+		charset="utf-8"></script>
+	<script type="text/javascript" src="@routes.Assets.at("javascripts/rules.js")"></script>
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+.sd-loader {
+    position: absolute;
+    top: 0; left: 0;
+    bottom: 0; right: 0;
+    min-height: 150px;
+    background: url('../images/smoke_loader.gif') rgba(250, 250, 250, 0.9) 50% 50% no-repeat;
+}
+
+/* base styles */
+/* ----------- */
+
+.form-control {
+	display: block;
+	width: 100%;
+	height: 34px;
+	padding: 6px 12px;
+	font-size: 14px;
+	line-height: 1.42857143;
+	color: #555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+	-webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+	-o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+.form-control:focus {
+	border: 1px solid #0097cf;
+	border-color: #66afe9;
+	outline: 0;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+	box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+}
+
+.typeahead,
+.tt-query,
+.tt-hint {
+	width: 396px;
+	padding: 8px 12px;
+	font-size: 18px;
+	border: 1px solid #ccc;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	outline: none;
+	
+	margin-right: 5px;
+}
+
+.typeahead.compact {
+	height: 32px;
+}
+
+.typeahead.normal {
+	height: 37px;
+}
+
+
+.empty-message {
+	padding: 3px 10px 3px 10px;
+}
+
+.tt-query {
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+	color: #999
+}
+
+.twitter-typeahead {
+	vertical-align: middle;
+}
+
+.tt-dropdown-menu {
+	width: 600px;
+	margin-top: 5px;
+	padding: 5px 0;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	
+	-webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+	box-shadow: 0 5px 10px rgba(0,0,0,.2);
+		  
+	/* to make the dropdown-menu scrollable */
+	max-height: 450px;
+	overflow-y: auto;
+}
+
+.tt-suggestion {
+	padding: 3px 20px;
+/*	font-size: 16px;*/
+	line-height: 18px;
+	margin-bottom: 5px;
+}
+
+.tt-suggestion.tt-cursor {
+  color: #fff;
+  background-color: #0097cf;
+
+}
+
+.tt-suggestion p {
+  margin: 0;
+}
+
+.gist {
+  font-size: 24px;
+}
+
+/* File upload styles */
+.fileinput-button {
+  position: relative;
+  overflow: hidden;
+}
+.fileinput-button input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  opacity: 0;
+  -ms-filter: 'alpha(opacity=0)';
+  font-size: 200px;
+  direction: ltr;
+  cursor: pointer;
+}
+
+/* Fixes for IE < 8 */
+@media screen\9 {
+  .fileinput-button input {
+    filter: alpha(opacity=0);
+    font-size: 100%;
+    height: 100%;
+  }
+}
+
+.fileupload {
+	position: relative;
+	overflow: hidden;
+	margin: 10px;
+}
+.fileupload input.upload {
+	position: absolute;
+	top: 0;
+	right: 0;
+	margin: 0;
+	padding: 0;
+	font-size: 20px;
+	cursor: pointer;
+	opacity: 0;
+	filter: alpha(opacity=0);
+}
+
+/* filelist table */
+.filelist p {
+	margin: 0px;
+}
+
+.filelist .progress {
+	margin: 0px;
+}
+
+/* table */
+#mytable_wrapper {
+	margin-top: 10px;
+}

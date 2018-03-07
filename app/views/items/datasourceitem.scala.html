@@ -1,0 +1,13 @@
+@*********************************************************
+ * panel describing a single data source                 *
+ * A datasource is (for now) an orignating file, feed    *
+ * or database that we use to populate our project graph *
+ * @param datasource details of origin of the data       *
+ ********************************************************@
+@(datasource: Datasource)
+
+<li data-project="@datasource.id" style="">
+    <span>
+    <span class="glyphicon glyphicon-cloud"> </span><a class="name" href="#@routes.Tasks.index(datasource.id.get)"> @datasource.description</a><button class="delete close" href="@routes.Projects.delete(datasource.id.get)">&times;</button>
+    </span>    
+</li>

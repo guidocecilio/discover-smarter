@@ -1,0 +1,15 @@
+@*********************************************************
+ * general 2 bar layout with sidebar on right            *
+ * @param message title to be shown                      *
+ * @param user name of current user who is logged in     *
+ * @param contentbar main html, from other templates     *
+ * @param sidebar sidebar html content                   * 
+ ********************************************************@
+@(message: String, user: User)(contentbar: Html)(sidebar: Html)
+
+@layouts.main("this is the graph", user) { 
+  <div class="row" id="rowcontainer">	  
+    <div id="mainbar" class="col-md-9">@contentbar</div>
+    <div id="sidebar" class="col-md-3">@sidebar</div>
+  </div>
+}

@@ -1,0 +1,33 @@
+@*********************************************************
+ * allows you to add or remove users to this group       *
+ * @param team list of users on the system               *
+ ********************************************************@
+@(team: Seq[User])
+<div class="users panel panel-primary ">
+	<div class="panel-heading">
+	      	<span class="glyphicon glyphicon-user"></span> Project team
+	      	<div class="btn-group pull-right" style="color:black;">
+			  <button type="button" class="btn btn-xs btn-info dropdown-toggle" data-toggle="dropdown">
+			    Add <span class="caret"></span>
+			  </button>
+	              <ul class="addUserList nav dropdown-menu">
+	                  @User.findAll.diff(team).map { user =>
+	                      <li data-user-id="@user.email">
+	                          @user.name
+	                          <span class="action glyphicon glyphicon-plus-sign"></span>
+	                      </li>
+	                  }
+	              </ul>
+	       </div>
+	   </div>
+	<div class="panel-body">
+	    <ul class="list nav nav-pills nav-stacked">
+	        @team.map { user =>
+	            <li data-user-id="@user.email">
+	                @user.name
+	                <span class="action glyphicon glyphicon-remove-circle"></span>
+	            </li>
+	        }
+	    </ul>
+	</div>
+</div>

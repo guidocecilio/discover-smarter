@@ -1,0 +1,33 @@
+@*********************************************************
+ * twitter like page that gives summary of all your      *
+ * projects. shows list of events                        *
+ * @param projects all the projects available to whom?   *
+ * @param events sequence of event to be shown           *
+ * @param user name of current user who is logged in     *
+ ********************************************************@
+@(projects: Seq[Project], events: Seq[(Task,Project)], user: User)
+
+@layouts.twocolumnProjects(projects, user){
+	        <script type="text/javascript" src="@routes.Assets.at("javascripts/main.js")"></script>
+		<div class="row">
+		    <ol class="breadcrumb">
+			  <li>Analyse</li>
+			  <li class="active">Dashboard</li>
+			</ol>
+		</div>
+		<div class="row">
+	
+        @events.groupBy(_._2).map {
+            case (project, projectTasks) => {
+				@projectTasks.map { 
+				    case (task, _) => {
+				        @views.html.items.eventitem(task, project.name)
+				    }
+				}
+            }
+        }
+	</div>
+
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/main.js")"></script>
+}
+

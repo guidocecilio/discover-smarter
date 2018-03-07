@@ -1,0 +1,19 @@
+@*********************************************************
+ * general 2 bar layout with project menu on left        *
+ * used on project pages                                 *
+ * @param projects all the projects available to whom?   *
+ * @param user name of current user who is logged in     *
+ * @param body main html, from other templates           *
+ ********************************************************@
+@(projects: Seq[Project], user: User)(body: Html)
+
+@layouts.main("welcome to Smarter Data", user) { 
+	<div class="row" id="rowcontainer">
+        <div class="col-md-3">
+        	@views.html.panels.projectsmenupanel(projects)
+        </div>
+    	<div id="main" class="col-md-9">
+    		@body
+    	</div>
+   	</div>
+}

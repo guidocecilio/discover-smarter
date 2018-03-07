@@ -1,0 +1,12 @@
+@*********************************************************
+ * panel item that gives a summary of a project          *
+ * intended to be part of a list                         *
+ * @param project the details of the project             *
+ ********************************************************@
+@(project: Project)
+
+<li data-project="@project.id" style="">
+    <span>
+    <span class="glyphicon glyphicon-folder-close"> </span><a class="name" href="#@routes.Tasks.index(project.id.get)"> @project.name</a><button class="delete close" href="@routes.Projects.delete(project.id.get)">&times;</button>
+    </span>    
+</li>
